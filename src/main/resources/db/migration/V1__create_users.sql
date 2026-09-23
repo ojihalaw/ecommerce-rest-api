@@ -1,0 +1,19 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE users (
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+   username VARCHAR(100) NOT NULL,
+   email VARCHAR(255) NOT NULL,
+   password VARCHAR(255) NOT NULL,
+
+   role VARCHAR(30) NOT NULL DEFAULT 'CUSTOMER',
+   status VARCHAR(30) NOT NULL DEFAULT 'ACTIVE',
+
+   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   deleted_at TIMESTAMP NULL,
+
+   CONSTRAINT uk_users_username UNIQUE (username),
+   CONSTRAINT uk_users_email UNIQUE (email)
+);
