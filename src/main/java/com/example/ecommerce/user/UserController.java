@@ -1,5 +1,6 @@
 package com.example.ecommerce.user;
 
+import com.example.ecommerce.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,24 +14,38 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse register(
+    public ApiResponse<UserResponse> register(
             @Valid @RequestBody RegisterRequest request
     ){
-        return userService.register(request);
+        UserResponse response = userService.register(request);
+
+        return ApiResponse.success(
+                201,
+                "User added successfully",
+                response
+        );
     }
 
     @GetMapping("/me")
-    public UserResponse me(
+    public ApiResponse<UserResponse> me(
             org.springframework.security.core.Authentication authentication
     ) {
         User user = (User) authentication.getPrincipal();
 
-        return new UserResponse(
+
+
+        UserResponse response = new UserResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole(),
                 user.getStatus()
+        );
+
+        return ApiResponse.success(
+                200,
+                "Get me successfully",
+                response
         );
     }
 }

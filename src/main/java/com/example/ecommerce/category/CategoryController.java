@@ -1,5 +1,6 @@
 package com.example.ecommerce.category;
 
+import com.example.ecommerce.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,27 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponse create(
+    public ApiResponse<CategoryResponse> create(
             @Valid @RequestBody CreateCategoryRequest request
     ){
-        return categoryService.create(request);
+        CategoryResponse response = categoryService.create(request);
+
+        return ApiResponse.success(
+                201,
+                "Category added successfully",
+                response
+        );
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryResponse> findAll(){
-        return categoryService.findAll();
+    public ApiResponse<List<CategoryResponse>> findAll(){
+        List<CategoryResponse> response = categoryService.findAll();
+
+        return ApiResponse.success(
+                200,
+                "Categories retrieved successfully",
+                response
+        );
     };
 }

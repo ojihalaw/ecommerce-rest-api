@@ -1,5 +1,6 @@
 package com.example.ecommerce.product;
 
+import com.example.ecommerce.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,27 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse create(
+    public ApiResponse<ProductResponse> create(
             @Valid @RequestBody CreateProductRequest request
     ) {
-        return productService.create(request);
+        ProductResponse response = productService.create(request);
+
+        return ApiResponse.success(
+                201,
+                "Product added successfully",
+                response
+        );
     }
 
     @GetMapping
-    public List<ProductResponse> findAll() {
-        return productService.findAll();
+    public ApiResponse<List<ProductResponse>> findAll() {
+
+        List<ProductResponse> responses = productService.findAll();
+
+        return ApiResponse.success(
+                200,
+                "Product retrieve successfully",
+                responses
+        );
     }
 }
